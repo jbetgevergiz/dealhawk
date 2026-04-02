@@ -20,46 +20,46 @@ The scraper rotates user agents, respects request delays, and falls back through
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        Docker Container                          │
-│                                                                  │
+│                        Docker Container                         │
+│                                                                 │
 │  ┌──────────────┐    ┌─────────────────────────────────────┐    │
 │  │  config.yml  │───▶│           APScheduler               │    │
 │  │  (watchlist) │    │    (interval_hours, default: 1h)    │    │
 │  └──────────────┘    └──────────────┬──────────────────────┘    │
-│                                     │                            │
-│                                     ▼                            │
+│                                     │                           │
+│                                     ▼                           │
 │                        ┌────────────────────────┐               │
-│                        │       Scrapers          │               │
-│                        │  PCPartPicker (first)   │               │
-│                        │  Amazon (fallback)      │               │
-│                        │  Newegg (fallback)      │               │
+│                        │       Scrapers          │              │
+│                        │  PCPartPicker (first)   │              │
+│                        │  Amazon (fallback)      │              │
+│                        │  Newegg (fallback)      │              │
 │                        └──────────┬─────────────┘               │
-│                                   │                              │
-│                                   ▼                              │
+│                                   │                             │
+│                                   ▼                             │
 │                        ┌────────────────────────┐               │
-│                        │    SQLite Database      │               │
-│                        │  data/dealhawk.db       │               │
-│                        │  (price history,        │               │
-│                        │   alert log, failures)  │               │
+│                        │    SQLite Database      │              │
+│                        │  data/dealhawk.db       │              │
+│                        │  (price history,        │              │
+│                        │   alert log, failures)  │              │
 │                        └──────────┬─────────────┘               │
-│                                   │                              │
-│                                   ▼                              │
+│                                   │                             │
+│                                   ▼                             │
 │                        ┌────────────────────────┐               │
-│                        │  Analysis Engine        │               │
-│                        │  30-day rolling avg     │               │
-│                        │  drop_threshold_pct     │               │
-│                        │  cooldown check         │               │
+│                        │  Analysis Engine        │              │
+│                        │  30-day rolling avg     │              │
+│                        │  drop_threshold_pct     │              │
+│                        │  cooldown check         │              │
 │                        └──────────┬─────────────┘               │
-│                                   │                              │
+│                                   │                             │
 │          ┌────────────────────────┼────────────────────┐        │
-│          │                        │                    │         │
-│          ▼                        ▼                    ▼         │
-│  ┌──────────────┐     ┌──────────────────┐   ┌──────────────┐  │
-│  │   No alert   │     │  Telegram alert  │   │  /health     │  │
-│  │   (price OK) │     │  (price dropped) │   │  :8085       │  │
-│  └──────────────┘     └────────┬─────────┘   └──────────────┘  │
-│                                 │                                │
-└─────────────────────────────────┼────────────────────────────────┘
+│          │                        │                    │        │
+│          ▼                        ▼                    ▼        │
+│  ┌──────────────┐     ┌──────────────────┐   ┌──────────────┐   │
+│  │   No alert   │     │  Telegram alert  │   │  /health     │   │
+│  │   (price OK) │     │  (price dropped) │   │  :8085       │   │
+│  └──────────────┘     └────────┬─────────┘   └──────────────┘   │
+│                                 │                               │
+└─────────────────────────────────┼───────────────────────────────┘
                                   │
                      ┌────────────▼────────────┐
                      │   Cloudflare Tunnel      │
