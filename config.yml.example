@@ -1,0 +1,105 @@
+# ============================================================
+# DealHawk Configuration
+# ============================================================
+# Copy this file to config.yml and customize your watchlist.
+# config.yml is .gitignored — your watchlist stays private.
+# ============================================================
+
+# ------------------------------------------------------------
+# Alert Settings
+# ------------------------------------------------------------
+alerts:
+  # Send a Telegram alert when price drops this % below rolling average
+  default_drop_threshold_pct: 15
+
+  # How many days of price history to use for the rolling average
+  # Requires at least 5 data points before alerts fire
+  default_lookback_days: 30
+
+  # Hours between repeated alerts for the same component (prevents spam)
+  alert_cooldown_hours: 24
+
+  # How many consecutive scrape failures before sending a failure alert
+  failure_alert_threshold: 3
+
+# ------------------------------------------------------------
+# Scraping Settings
+# ------------------------------------------------------------
+scraping:
+  # How often to scrape all components (in hours)
+  interval_hours: 1
+
+  # HTTP request timeout (seconds)
+  request_timeout_seconds: 30
+
+  # Polite delay between requests per search term (seconds)
+  request_delay_seconds: 3
+
+  # Rotate user agents to reduce blocking
+  user_agents:
+    - "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    - "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+
+# ------------------------------------------------------------
+# Freshness / Staleness Detection
+# ------------------------------------------------------------
+freshness:
+  # Mark a component as "stale" if no successful scrape in this many hours
+  staleness_ttl_hours: 6
+
+  # Threshold for "no data" warning (hours since any data at all)
+  no_data_threshold_hours: 24
+
+# ------------------------------------------------------------
+# Components (your watchlist)
+# ------------------------------------------------------------
+# Each component is a product you want to track.
+# DealHawk tries PCPartPicker first, then Amazon, then Newegg.
+#
+# Fields:
+#   name          - Friendly label shown in Telegram alerts
+#   category      - PCPartPicker category slug (optional, used for filtering)
+#   search_terms  - List of search queries to try on each retailer
+#   retailers     - Which stores to try: [amazon, newegg, pcpartpicker]
+#   drop_threshold_pct  - Override global alert threshold for this item (optional)
+#   lookback_days       - Override global lookback window for this item (optional)
+# ------------------------------------------------------------
+
+components:
+  # --- Example: Gaming Monitor ---
+  - name: "27-inch 1440p Gaming Monitor"
+    category: "monitor"
+    search_terms:
+      - "27 inch 1440p 144hz gaming monitor"
+      - "27 inch QHD IPS gaming monitor 144hz"
+    retailers: [amazon, newegg]
+    # Alert when price drops 20% below 30-day average
+    drop_threshold_pct: 20
+    lookback_days: 30
+
+  # --- Example: Mechanical Keyboard ---
+  - name: "Mechanical Keyboard TKL"
+    category: "keyboard"
+    search_terms:
+      - "tenkeyless mechanical keyboard"
+      - "TKL mechanical keyboard hot-swap"
+    retailers: [amazon, newegg]
+    # Uses global defaults (15% threshold, 30-day lookback)
+
+  # --- Example: Coffee Maker ---
+  - name: "Drip Coffee Maker 12-Cup"
+    category: "kitchen"
+    search_terms:
+      - "12 cup programmable drip coffee maker"
+      - "12 cup coffee maker with thermal carafe"
+    retailers: [amazon]
+    drop_threshold_pct: 25
+    lookback_days: 60
+
+  # --- Example: Smart TV ---
+  - name: "55-inch 4K Smart TV"
+    category: "tv"
+    search_terms:
+      - "55 inch 4K smart TV"
+      - "55 inch OLED TV"
+    retailers: [amazon, newegg]
